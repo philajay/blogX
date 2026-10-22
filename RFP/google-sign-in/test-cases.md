@@ -70,9 +70,11 @@ Command: `firebase use blog-65f42 && npm run typecheck && npm run build && fireb
 ## Merge and push
 
 Date: 2026-10-22
-- Worktree changes are on local branch `feature/google-sign-in`.
-- Not committed, merged, or pushed; the user has not requested those actions.
-- The deploy was produced from the current feature-branch worktree using the local gitignored `.env`.
+- Feature commit: `beb91d5` (`feat: add Google sign-in`)
+- Merge commit on `main`: `3283b76` (`Merge branch 'feature/google-sign-in'`)
+- `main` pushed to `origin/main`
+- `feature/google-sign-in` pushed to `origin/feature/google-sign-in` and kept alive
+- The deploy was produced from the feature-branch worktree using the local gitignored `.env`.
 
 ## Out of scope
 
