@@ -74,6 +74,16 @@ Commands: `firebase functions:secrets:set OPENROUTER_API_KEY --data-file <file>`
 | Live public flow | PASS | Signed-out reader sees the summary with no action. |
 | Client secret scan | PASS | No OpenRouter key material in `dist` or git. |
 
+## Merge and push
+
+Date: 2026-10-22
+- Feature commit: `230be91` (`feat: add AI post summaries with Firebase Functions`)
+- Merge commit on `main`: `ac726df` (`Merge branch 'feature/ai-summary'`)
+- `main` pushed to `origin/main`
+- `feature/ai-summary` pushed to `origin/feature/ai-summary` and kept alive
+- The test post and its saved AI summary remain in production.
+- Restart opencode so the updated `blog-stack` skill is loaded.
+
 ## Out of scope
 
 - Automated test scripts, test runners, and CI test jobs.
