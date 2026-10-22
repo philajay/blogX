@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom";
 
-export function Hero() {
+type HeroProps = {
+  storyCount: number;
+  topicCount: number;
+};
+
+export function Hero({ storyCount, topicCount }: HeroProps) {
   return (
     <section className="relative overflow-hidden border-b border-slate-200/70 bg-linear-to-br from-indigo-50 via-white to-sky-50">
       <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-indigo-200/50 blur-3xl" />
@@ -39,13 +44,17 @@ export function Hero() {
             <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
               Stories
             </dt>
-            <dd className="mt-1 text-2xl font-black text-slate-950">10</dd>
+            <dd className="mt-1 text-2xl font-black text-slate-950">
+                {storyCount}
+              </dd>
           </div>
           <div>
             <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
               Topics
             </dt>
-            <dd className="mt-1 text-2xl font-black text-slate-950">8</dd>
+            <dd className="mt-1 text-2xl font-black text-slate-950">
+                {topicCount}
+              </dd>
           </div>
           <div>
             <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">

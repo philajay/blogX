@@ -49,6 +49,12 @@ export function Header() {
         ) : user ? (
           <div className="flex flex-col items-end gap-1">
             <div className="flex items-center gap-2 sm:gap-3">
+              <Link
+                to="/write"
+                className="rounded-full bg-indigo-50 px-3 py-2 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:px-4"
+              >
+                Write
+              </Link>
               {user.photoURL ? (
                 <img
                   src={user.photoURL}
