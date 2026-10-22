@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric",
@@ -5,8 +7,23 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
   timeZone: "UTC",
 });
 
-export function formatPostDate(value: string): string {
-  return dateFormatter.format(new Date(value));
+type DateValue = Timestamp | Date | string | null | undefined;
+
+export function formatPostDate(value: DateValue): string {
+  const date =
+    value instanceof Timestamp
+      ? value.toDate()
+      : value instanceof Date
+        ? value
+        : typeof value === "string"
+          ? new Date(value)
+          : null;
+
+  if (!date || Number.isNaN(date.getTime())) {
+    return "Just now";
+  }
+
+  return dateFormatter.format(date);
 }
 
 export function getInitials(name: string): string {
