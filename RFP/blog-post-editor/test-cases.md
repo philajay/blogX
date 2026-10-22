@@ -76,6 +76,15 @@ Commands: `firebase deploy --only firestore:rules,storage`, then `npm run typech
 | Live `/post/:id` | PASS | Direct route rendered the title and rendered code block; 0 console errors. |
 | Public cover URL | PASS | Storage download URL returned 200 with `image/webp`. |
 
+## Merge and push
+
+Date: 2026-10-22
+- Feature commit: `2a5eb32` (`feat: add markdown editor and Firestore posts`)
+- Merge commit on `main`: `93e4b64` (`Merge branch 'feature/blog-post-editor'`)
+- `main` pushed to `origin/main`
+- `feature/blog-post-editor` pushed to `origin/feature/blog-post-editor` and kept alive
+- The test blog `WmBhqvri4L84C1AaPRd1` remains in Firestore and Storage.
+
 ## Out of scope
 
 - Automated test scripts, test runners, and CI test jobs.
