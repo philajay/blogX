@@ -1,14 +1,40 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
 import { MarkdownContent } from "../components/MarkdownContent";
+import { useAuthUser } from "../lib/auth";
 import { formatPostDate, getInitials } from "../lib/format";
+import {
+  getFunctionsErrorMessage,
+  requestPostSummary,
+} from "../lib/functions";
 import { usePost } from "../lib/posts";
 
 export default function PostPage() {
   const { postId } = useParams<{ postId: string }>();
   const { post, loading, error } = usePost(postId);
+  const { user } = useAuthUser();
+  const [summarizing, setSummarizing] = useState(false);
+  const [summaryError, setSummaryError] = useState<string | null>(null);
+  const isCreator = Boolean(post && user && post.authorId === user.uid);
+
+  async function handleSummarize() {
+    if (!post) {
+      return;
+    }
+
+    setSummarizing(true);
+    setSummaryError(null);
+
+    try {
+      await requestPostSummary(post.id);
+    } catch (cause) {
+      setSummaryError(getFunctionsErrorMessage(cause));
+    } finally {
+      setSummarizing(false);
+    }
+  }
 
   let body: ReactNode;
 
@@ -98,6 +124,63 @@ export default function PostPage() {
             </p>
           </div>
         </div>
+        {post.summary ? (
+          <section className="mt-6 rounded-3xl border border-indigo-200 bg-indigo-50/70 p-6">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
+                AI summary
+              </p>
+              {isCreator ? (
+                <button
+                  type="button"
+                  onClick={handleSummarize}
+                  disabled={summarizing}
+                  className="rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {summarizing ? "Regenerating..." : "Regenerate summary"}
+                </button>
+              ) : null}
+            </div>
+            <p className="mt-3 whitespace-pre-line text-base leading-7 text-slate-700">
+              {post.summary}
+            </p>
+            {summaryError ? (
+              <p
+                role="alert"
+                className="mt-3 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700"
+              >
+                {summaryError}
+              </p>
+            ) : null}
+          </section>
+        ) : isCreator ? (
+          <section className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-dashed border-indigo-300 bg-white p-6">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-700">
+                AI summary
+              </p>
+              <p className="mt-1 text-sm leading-6 text-slate-600">
+                Generate a short 2-3 sentence summary for this post.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={handleSummarize}
+              disabled={summarizing}
+              className="rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {summarizing ? "Summarizing..." : "Summarize with AI"}
+            </button>
+            {summaryError ? (
+              <p
+                role="alert"
+                className="w-full rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700"
+              >
+                {summaryError}
+              </p>
+            ) : null}
+          </section>
+        ) : null}
         {post.coverImageUrl ? (
           <img
             src={post.coverImageUrl}
