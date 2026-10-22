@@ -29,6 +29,9 @@ export type Post = {
   authorId: string;
   authorName: string;
   authorPhotoUrl: string | null;
+  summary: string;
+  summaryModel: string;
+  summarizedAt: Timestamp | null;
   createdAt: Timestamp | null;
   updatedAt: Timestamp | null;
 };
@@ -98,6 +101,10 @@ function toPost(
       typeof data.authorName === "string" ? data.authorName : "BlogX member",
     authorPhotoUrl:
       typeof data.authorPhotoUrl === "string" ? data.authorPhotoUrl : null,
+    summary: typeof data.summary === "string" ? data.summary : "",
+    summaryModel: typeof data.summaryModel === "string" ? data.summaryModel : "",
+    summarizedAt:
+      data.summarizedAt instanceof Timestamp ? data.summarizedAt : null,
     createdAt: data.createdAt instanceof Timestamp ? data.createdAt : null,
     updatedAt: data.updatedAt instanceof Timestamp ? data.updatedAt : null,
   };

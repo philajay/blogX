@@ -1,15 +1,17 @@
 ---
 name: blog-stack
-description: Use when building, changing, reviewing, or deploying the blog app. Enforces the React client-only stack, Firebase Hosting deployment, Firestore for all data, Firebase Storage for all uploads, and Firebase project blog-65f42.
+description: Use when building, changing, reviewing, or deploying the blog app. Enforces the React client stack, Firebase Hosting, Firestore for all data, Firebase Storage for all uploads, approved TypeScript Firebase Functions for privileged work, and Firebase project blog-65f42.
 ---
 
 # Blog Stack
 
-The blog is a client-side React app. Firebase is the only backend.
+The blog is a client-side React app. Firebase is the only backend. Approved Firebase Functions may back privileged integrations; no other backend is allowed.
 
 ## Fixed decisions
 
-- **Client:** React, running entirely in the browser. No server-rendered app, API server, custom backend, or edge functions.
+- **Client:** React, running entirely in the browser. No server-rendered app, API server, custom backend, or non-Firebase edge functions.
+- **Functions:** Firebase Cloud Functions (TypeScript) are allowed only with explicit user approval for each new function. Ask before adding any function, even if it uses Firebase services.
+- **Secrets:** Function secrets live in Google Secret Manager, never in the client bundle or repository. Use `defineSecret` and document the secret name.
 - **Deployment:** Firebase Hosting. Project ID: `blog-65f42`.
 - **Repository:** `https://github.com/philajay/blogX.git`; default branch `main`.
 - **Branching:** Work on `feature/<name>`, merge into `main` with `--no-ff` after deploy verification, and keep the feature branch alive.
@@ -31,6 +33,11 @@ The blog is a client-side React app. Firebase is the only backend.
 - Firebase web config values are not secrets, but never place service-account keys, admin SDK credentials, or privileged tokens in the client bundle. Use env vars for config and keep `.env*` out of git.
 - Handle loading, empty, and error states for every Firestore and Storage call. Do not fail silently.
 - Do not invent authentication or authorization requirements. If access control is needed and no rule exists, stop and ask.
+- Keep approved functions in `functions/` as TypeScript with its own package. Use Node 22, the Admin SDK, and enforce authorization inside the function rather than trusting the client.
+- Never log secrets or full user content in functions. Log only status and error metadata.
+- Use Secret Manager for function credentials: `defineSecret("NAME")` in code and `firebase functions:secrets:set NAME --data-file <file>`. Never commit the value.
+- Do not allow client writes to fields that only a function may set; Admin SDK writes bypass Firestore rules.
+- Add functions to `firebase.json` under `functions` with `source` and `runtime`.
 
 ## Testing
 
@@ -50,6 +57,7 @@ The blog is a client-side React app. Firebase is the only backend.
   2. `npm run typecheck`
   3. `npm run build`
   4. `firebase deploy --only hosting`
+- When an approved function changes, build it first with `npm --prefix functions run build`, then deploy with `firebase deploy --only functions`. Set or rotate secrets with `firebase functions:secrets:set` before deploying.
 - Run the repository's lint and tests too, before deploying, when they exist. Do not deploy on a failed check.
 - When rules or indexes change, deploy them too: `firebase deploy --only firestore:rules,firestore:indexes,storage`.
 - After deploy, verify the live Hosting URL and at least one direct SPA route (for example `/signup`) with `playwright-cli` in headed mode. Check the browser console for errors.
@@ -63,6 +71,8 @@ The blog is a client-side React app. Firebase is the only backend.
 Stop and ask before:
 
 - Introducing any non-Firebase backend, database, storage service, or hosting provider.
+- Adding any new Firebase Function without explicit approval for that function.
 - Changing the Firebase project ID.
 - Adding auth, payments, or access rules that were not specified.
 - Deploying without the required credentials or project access.
+- Adding a secret without a clear owner, name, and Secret Manager plan.
