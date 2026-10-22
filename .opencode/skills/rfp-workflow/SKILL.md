@@ -188,7 +188,8 @@ After every agreed test and build check passes:
 3. Switch to `main` and merge the feature branch with `git merge --no-ff feature/<feature-name>` so the feature history stays visible.
 4. If `main` does not exist, create it from the repository's initial commit before merging.
 5. Keep `feature/<feature-name>` alive after the merge. Never delete the local or remote feature branch unless the user explicitly asks.
-6. Do not push unless the user asks.
+6. Push `main` and `feature/<feature-name>` to the configured remote when the user asks to publish. Keep both branches on the remote.
+7. Do not push unless the user asks.
 
 ## Completion
 

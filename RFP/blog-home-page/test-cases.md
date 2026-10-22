@@ -64,6 +64,14 @@ Command: `firebase use blog-65f42 && npm run typecheck && npm run build && fireb
 | Live home page | PASS | Title `BlogX — Stories worth your time`; 10 articles, header `Sign up`, hero present, 0 images, 0 console errors. |
 | Live SPA route | PASS | Direct `https://blog-65f42.web.app/signup` returned the sign-up stub heading; no console errors or warnings. |
 
+## Merge and push
+
+Date: 2026-10-22
+- Feature commit: `c8f1ef9`
+- Merge commit on `main`: `7f5ae2c` (`Merge branch 'feature/blog-home-page'`)
+- `main` pushed to `origin/main`
+- `feature/blog-home-page` pushed to `origin/feature/blog-home-page` and kept alive
+
 ## Out of scope
 
 - Automated test scripts, test runners, and CI test jobs.

@@ -11,6 +11,8 @@ The blog is a client-side React app. Firebase is the only backend.
 
 - **Client:** React, running entirely in the browser. No server-rendered app, API server, custom backend, or edge functions.
 - **Deployment:** Firebase Hosting. Project ID: `blog-65f42`.
+- **Repository:** `https://github.com/philajay/blogX.git`; default branch `main`.
+- **Branching:** Work on `feature/<name>`, merge into `main` with `--no-ff` after deploy verification, and keep the feature branch alive.
 - **Data:** Cloud Firestore for every persisted record and document.
 - **Files:** Firebase Storage for every uploaded file and image, including post images and user-provided media.
 - **SDK:** Firebase Web JS SDK (modular `firebase/*` imports) called directly from React.
